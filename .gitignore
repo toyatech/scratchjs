@@ -1,0 +1,3 @@
+*.swp
+public/components
+node_modules

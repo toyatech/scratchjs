@@ -1,0 +1,25 @@
+{
+  "name": "scratchjs",
+  "version": "0.0.0",
+  "description": "A universal application builder for JavaScript frameworks.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/toyatech/scratchjs"
+  },
+  "keywords": [
+    "javascript",
+    "framework",
+    "application",
+    "builder"
+  ],
+  "author": "ToyaTech",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/toyatech/scratchjs/issues"
+  },
+  "homepage": "https://github.com/toyatech/scratchjs"
+}

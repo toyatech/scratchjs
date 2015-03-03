@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Scratch Schema Form Editor</title>
+
+    <link rel="stylesheet" type="text/css" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="components/bg-splitter/css/style.css">
+    <link rel="stylesheet" type="text/css" href="components/codemirror/lib/codemirror.css">
+
+  </head>
+  <body ng-app="scratchApp">
+
+    <div ng-controller="EditorController">
+      <bg-splitter orientation="horizontal">
+        <bg-pane min-size="100">
+          <bg-splitter orientation="vertical">
+            <bg-pane min-size="50">
+              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmSchema()"></ui-codemirror>
+            </bg-pane>
+            <bg-pane min-size="50">
+              <form sf-schema="schema" sf-form="form" sf-model="model"></form>
+            </bg-pane>
+          </bg-splitter>
+        </bg-pane>
+        <bg-pane min-size="100">
+          <bg-splitter orientation="vertical">
+            <bg-pane min-size="50">
+              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmForm()"></ui-codemirror>
+            </bg-pane>
+            <bg-pane min-size="50">
+              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmModel()"></ui-codemirror>
+            </bg-pane>
+          </bg-splitter>
+        </bg-pane>
+      </bg-splitter>
+    </div>
+
+    <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="components/tv4/tv4.js"></script>
+    <script type="text/javascript" src="components/objectpath/lib/ObjectPath.js"></script>
+    <script type="text/javascript" src="components/angular-schema-form/dist/schema-form.min.js"></script>
+    <script type="text/javascript" src="components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
+    <script type="text/javascript" src="components/bg-splitter/js/splitter.js"></script>
+    <script type="text/javascript" src="components/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="components/codemirror/mode/javascript/javascript.js"></script>
+    <script type="text/javascript" src="components/angular-ui-codemirror/ui-codemirror.js"></script>
+
+    <script>
+      var app = angular.module('scratchApp', ['bgDirectives', 'ui.codemirror', 'schemaForm'])
+        .controller('EditorController', ['$scope', function($scope) {
+          $scope.editorOptions = {
+            lineWrapping: true,
+            lineNumbers: true,
+            mode: 'application/json'
+          };
+          $scope.schema = {type: 'object', properties: { name: { type: 'string' } } };
+          $scope.form = {};
+          $scope.model = {};
+          $scope.cmSchema = function() { return JSON.stringify($scope.schema); };
+          $scope.cmForm = function() { return JSON.stringify($scope.form); };
+          $scope.cmModel = function() { return JSON.stringify($scope.model); };
+        }])
+    </script>
+
+  </body>
+</html>

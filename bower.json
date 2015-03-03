@@ -1,0 +1,28 @@
+{
+  "name": "scratchjs",
+  "version": "0.0.0",
+  "authors": [
+    "ToyaTech"
+  ],
+  "description": "A universal application builder for JavaScript frameworks.",
+  "main": "index.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "javascript",
+    "framework",
+    "application",
+    "builder"
+  ],
+  "license": "MIT",
+  "homepage": "http://toyatech.net/scratchjs",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
