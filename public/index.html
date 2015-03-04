@@ -9,6 +9,11 @@
     <link rel="stylesheet" type="text/css" href="components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="components/bg-splitter/css/style.css">
     <link rel="stylesheet" type="text/css" href="components/codemirror/lib/codemirror.css">
+    <style>
+      .CodeMirror {
+        height: auto;
+      }
+    </style>
 
   </head>
   <body ng-app="scratchApp">
@@ -18,20 +23,20 @@
         <bg-pane min-size="100">
           <bg-splitter orientation="vertical">
             <bg-pane min-size="50">
-              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmSchema()"></ui-codemirror>
+              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmSchema"></ui-codemirror>
             </bg-pane>
             <bg-pane min-size="50">
-              <form sf-schema="schema" sf-form="form" sf-model="model"></form>
+              <form sf-schema="schema()" sf-form="form()" sf-model="model"></form>
             </bg-pane>
           </bg-splitter>
         </bg-pane>
         <bg-pane min-size="100">
           <bg-splitter orientation="vertical">
             <bg-pane min-size="50">
-              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmForm()"></ui-codemirror>
+              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmForm"></ui-codemirror>
             </bg-pane>
             <bg-pane min-size="50">
-              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmModel()"></ui-codemirror>
+              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmModel"></ui-codemirror>
             </bg-pane>
           </bg-splitter>
         </bg-pane>
@@ -57,14 +62,15 @@
           $scope.editorOptions = {
             lineWrapping: true,
             lineNumbers: true,
-            mode: 'application/json'
+            mode: 'application/json',
+            viewportMargin: Infinity
           };
-          $scope.schema = {type: 'object', properties: { name: { type: 'string' } } };
-          $scope.form = {};
+          $scope.cmSchema = '{"type":"object","properties":{"name":{"type":"string"}}}'; 
+          $scope.cmForm = '["*",{"type":"submit","title":"Save"}]'; 
+          $scope.cmModel = '';
+          $scope.schema = function() { return JSON.parse($scope.cmSchema) };
+          $scope.form = function() { return JSON.parse($scope.cmForm) };
           $scope.model = {};
-          $scope.cmSchema = function() { return JSON.stringify($scope.schema); };
-          $scope.cmForm = function() { return JSON.stringify($scope.form); };
-          $scope.cmModel = function() { return JSON.stringify($scope.model); };
         }])
     </script>
 
