@@ -1,0 +1,29 @@
+[
+  {
+    "key": "properties.type",
+    "title": "type",
+    "type": "select",
+    "titleMap": [
+      { "name": "array", "value": "array" },
+      { "name": "boolean", "value": "boolean" },
+      { "name": "integer", "value": "integer" },
+      { "name": "null", "value": "null" },
+      { "name": "number", "value": "number" },
+      { "name": "object", "value": "object" },
+      { "name": "string", "value": "string" }
+    ]
+  },
+  {
+    "type": "tabs",
+    "condition": "model.type === 'object'",
+    "tabs": [
+      {
+        "title": "definitions"
+      }
+    ]
+  },
+  {
+    "type": "submit",
+    "title": "Save"
+  }
+]
