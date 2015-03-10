@@ -30,17 +30,17 @@
         <bg-pane min-size="100">
           <bg-splitter orientation="vertical">
             <bg-pane min-size="50">
-              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmData.schema" ui-refresh="refresh"></ui-codemirror>
+              <ui-codemirror ui-codemirror-opts="schemaEditorOptions" ng-model="cmData.schema" ui-refresh="refresh"></ui-codemirror>
             </bg-pane>
             <bg-pane min-size="50">
-              <form sf-schema="schema" sf-form="form" sf-model="model"></form>
+              <form class="form-inline" sf-schema="schema" sf-form="form" sf-model="model"></form>
             </bg-pane>
           </bg-splitter>
         </bg-pane>
         <bg-pane min-size="100">
           <bg-splitter orientation="vertical">
             <bg-pane min-size="50">
-              <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="cmData.form" ui-refresh="refresh"></ui-codemirror>
+              <ui-codemirror ui-codemirror-opts="formEditorOptions" ng-model="cmData.form" ui-refresh="refresh"></ui-codemirror>
             </bg-pane>
             <bg-pane min-size="50">
               <pre ng-cloak>{{pretty()}}</pre>
@@ -53,10 +53,11 @@
     <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="components/angular-route/angular-route.min.js"></script>
     <script type="text/javascript" src="components/angular-sanitize/angular-sanitize.min.js"></script>
     <script type="text/javascript" src="components/tv4/tv4.js"></script>
     <script type="text/javascript" src="components/objectpath/lib/ObjectPath.js"></script>
-    <script type="text/javascript" src="components/angular-schema-form/dist/schema-form.min.js"></script>
+    <script type="text/javascript" src="components/angular-schema-form/dist/schema-form.js"></script>
     <script type="text/javascript" src="components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
     <script type="text/javascript" src="components/bg-splitter/js/splitter.js"></script>
     <script type="text/javascript" src="components/codemirror/lib/codemirror.js"></script>
@@ -64,18 +65,134 @@
     <script type="text/javascript" src="components/angular-ui-codemirror/ui-codemirror.js"></script>
 
     <script>
-      var app = angular.module('scratchApp', ['bgDirectives', 'ui.codemirror', 'schemaForm'])
-        .controller('EditorController', ['$scope', function($scope) {
-          $scope.editorOptions = {
+      var sratchApp = angular.module('scratchApp', ['ngRoute', 'bgDirectives', 'ui.codemirror', 'schemaForm'])
+        .controller('EditorController', ['$scope','$http', function($scope,$http) {
+          $scope.schemaEditorOptions = {
             lineWrapping: true,
             lineNumbers: true,
             mode: 'application/json'
           };
-          $scope.schema = {type:"object",properties:{name:{type:"string"}}};
-          $scope.form = ["*",{type:"submit",title:"Save"}];
+          $scope.formEditorOptions = {
+            lineWrapping: true,
+            lineNumbers: true,
+            mode: 'text/javascript'
+          };
+          $http.get('schemas/schema.json').then(function(res) {
+            $scope.schema = res.data;
+            $scope.cmData.schema = JSON.stringify($scope.schema,undefined,2);
+          });
+          //$scope.schema = {type:"object",properties:{name:{type:"string"}}};
+          $scope.form = [
+            "id",
+            "$schema",
+            "description",
+            {
+              "key": "type",
+              "title": "type",
+              "type": "select",
+              "titleMap": [
+                { "name": "array", "value": "array" },
+                { "name": "boolean", "value": "boolean" },
+                { "name": "integer", "value": "integer" },
+                { "name": "null", "value": "null" },
+                { "name": "number", "value": "number" },
+                { "name": "object", "value": "object" },
+                { "name": "string", "value": "string" }
+              ]
+            },
+            {
+              "type": "tabs",
+              "condition": "model.type === 'object'",
+              "tabs": [
+                {
+                  "title": "properties",
+                  "items": [
+                    "properties"
+                  ]
+                },
+                {
+                  "title": "additionalProperties",
+                  "items": [
+                    {
+                      "key": "additionalProperties"
+                    }
+                  ]
+                },
+                {
+                  "title": "dependencies",
+                  "items": [
+                    "dependencies",
+                  ]
+                },
+                {
+                  "title": "definitions",
+                  "items": [
+                    "definitions"
+                  ]
+                }
+              ]
+            },
+            {
+              type: 'fieldset',
+              condition: 'model.type === "string"',
+              items: [
+                'pattern',
+                'maxLength',
+                'minLength',
+                'enum'
+              ]
+            },
+            { 
+              type: "fieldset",
+              condition: 'model.type === "number"',
+              items: [
+                'multipleOf',
+                'maximum',
+                'exclusiveMaximum',
+                'minimum',
+                'exclusiveMinimum'
+              ]
+            },
+            {
+              type: 'fieldset',
+              condition: 'model.type === "boolean"',
+              items: [
+              ]
+            },
+            {
+              type: 'fieldset',
+              condition: 'model.type === "array"',
+              items: [
+                'maxItems',
+                'minItems',
+                'uniqueItems',
+                {
+                  type: 'tabs',
+                  condition: 'model.type === "object"',
+                  tabs: [
+                    {
+                      title: 'items',
+                      items: [
+                        'items'
+                      ]
+                    },
+                    {
+                      title: 'additionalItems',
+                      items: [
+                        'additionalItems'
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "submit",
+              "title": "Save"
+            }
+          ];
           $scope.model = {};
           $scope.cmData = {};
-          $scope.cmData.schema = JSON.stringify($scope.schema,undefined,2); 
           $scope.cmData.form = JSON.stringify($scope.form,undefined,2); 
 
           $scope.refresh = true;
