@@ -10,4 +10,20 @@
 | string with enum | <input type="select"     |
 | array with enum  | <input type="checkbox"   |
 | array of object  | <table                   |
- 
+| array with oneOf | <input type="select"     |
+
+# Form example
+```
+{
+  "fieldset": {
+    "legend": "Legend:",
+    "items": [
+      {
+        "label": "id",
+        "type": "text",
+        "format": "url"
+      }
+    ]
+  }
+}
+```
