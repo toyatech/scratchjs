@@ -53,12 +53,12 @@
         "uniqueItems": true,
         "items": {
           "anyOf": [
-            "$ref": "#/definitions/string",
-            "$ref": "#/definitions/number",
-            "$ref": "#/definitions/boolean",
-            "$ref": "#/definitions/array",
-            "$ref": "#/definitions/object",
-            "$ref": "#/definitions/null"
+            { "$ref": "#/definitions/string" },
+            { "$ref": "#/definitions/number" },
+            { "$ref": "#/definitions/boolean" },
+            { "$ref": "#/definitions/array" },
+            { "$ref": "#/definitions/object" },
+            { "$ref": "#/definitions/null" }
           ]
         }
       }
@@ -76,7 +76,7 @@
         "minLength": {
           "$ref": "#/definitions/positiveIntegerDefault0" 
         },
-        "pattern" {
+        "pattern": {
           "type": "string",
           "format": "regex"
         }
@@ -174,6 +174,10 @@
     "object": {
       "type": "object",
       "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "^object$"
+        },
         "maxProperties": {
           "$ref": "#/definitions/positiveInteger"
         },
@@ -195,28 +199,36 @@
           "default": {}
         },
         "definitions": {
-            "type": "object",
-            "additionalProperties": { "$ref": "#/definitions/object" },
-            "default": {}
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/object" },
+          "default": {}
         },
         "properties": {
-            "type": "object",
-            "additionalProperties": { "$ref": "#/definitions/object" },
-            "default": {}
+          "type": "object",
+          "additionalProperties": { 
+            "anyOf": [
+              { "$ref": "#/definitions/string" },
+              { "$ref": "#/definitions/number" },
+              { "$ref": "#/definitions/boolean" },
+              { "$ref": "#/definitions/array" },
+              { "$ref": "#/definitions/object" },
+              { "$ref": "#/definitions/null" }
+            ]
+          },
+          "default": {}
         },
         "patternProperties": {
-            "type": "object",
-            "additionalProperties": { "$ref": "#/definitions/object" },
-            "default": {}
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/object" },
+          "default": {}
         },
         "dependencies": {
-            "type": "object",
-            "additionalProperties": {
-                "anyOf": [
-                    { "$ref": "#" },
-                    { "$ref": "#/definitions/stringArray" }
-                ]
-            }
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              { "$ref": "#" },
+              { "$ref": "#/definitions/stringArray" }
+            ]
           }
         },
         "allOf": {

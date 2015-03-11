@@ -77,7 +77,7 @@
             lineNumbers: true,
             mode: 'text/javascript'
           };
-          $http.get('schemas/schema.json').then(function(res) {
+          $http.get('schemas/schema-enhanced.json').then(function(res) {
             $scope.schema = res.data;
             $scope.cmData.schema = JSON.stringify($scope.schema,undefined,2);
           });
